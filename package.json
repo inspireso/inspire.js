@@ -1,6 +1,6 @@
 {
     "name": "inspire.js",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "keywords": ["inspireso", "inspireso", "inspire.js", "controls"],
     "homepage": "https://github.com/inspireso/webapp",
@@ -19,7 +19,6 @@
     "spm": {
         "main": "index.js",
         "dependencies": {
-            "jquery": "1.9.1"
         },
         "devDependencies": {
             "expect.js": "0.3.1"
