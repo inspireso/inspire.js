@@ -1,0 +1,32 @@
+{
+    "name": "inspire.js",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": ["inspireso", "inspireso", "inspire.js", "controls"],
+    "homepage": "https://github.com/inspireso/webapp",
+    "author": "Inspireso Team",
+    "maintainers": [
+        "Inspireso Team"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/inspireso/webapp.git"
+    },
+    "bugs": {
+        "url": "https://github.com/inspireso/webapp/issues"
+    },
+    "licenses": "MIT",
+    "spm": {
+        "main": "index.js",
+        "dependencies": {
+            "jquery": "1.9.1"
+        },
+        "devDependencies": {
+            "expect.js": "0.3.1"
+        },
+        "engines": {
+            "seajs": "2.2.1"
+        },
+        "tests": "tests/*.js"
+    }
+}
