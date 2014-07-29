@@ -1,25 +1,24 @@
 {
     "name": "inspire-js",
     "version": "1.0.1",
-    "description": "",
-    "keywords": ["inspireso", "inspireso", "inspire.js", "controls"],
-    "homepage": "https://github.com/inspireso/webapp",
+    "description": "inspire-js:一个使用HTML扩展属性来扩展原生HTML标签功能的js库",
+    "keywords": ["inspireso", "inspire.js"],
+    "homepage": "https://github.com/inspireso/inspire.js",
     "author": "Inspireso Team",
     "maintainers": [
         "Inspireso Team"
     ],
     "repository": {
         "type": "git",
-        "url": "git://github.com/inspireso/webapp.git"
+        "url": "https://github.com/inspireso/inspire.js.git"
     },
     "bugs": {
-        "url": "https://github.com/inspireso/webapp/issues"
+        "url": "https://github.com/inspireso/inspire.js/issues"
     },
     "licenses": "MIT",
     "spm": {
         "main": "index.js",
-        "dependencies": {
-        },
+        "dependencies": {},
         "devDependencies": {
             "expect.js": "0.3.1"
         },
