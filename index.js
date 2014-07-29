@@ -21,4 +21,5 @@ exports.trim = require('./lib/trim');
 exports.validity = require('./lib/validity');
 exports.dialog = require('./lib/dialog');
 exports.async = require('./lib/async');
+exports.typeahead = require('./lib/typeahead');
 exports.messenger = require('./lib/messenger');

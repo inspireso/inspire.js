@@ -1,4 +1,4 @@
-define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "inspire-js/1.0.1/lib/checkbox-debug", "inspire-js/1.0.1/lib/confirm-debug", "inspire-js/1.0.1/lib/jump-debug", "inspire-js/1.0.1/lib/link-debug", "inspire-js/1.0.1/lib/messenger-debug", "inspire-js/1.0.1/lib/money-debug", "inspire-js/1.0.1/lib/number-debug", "inspire-js/1.0.1/lib/pagination-debug", "inspire-js/1.0.1/lib/required-debug", "inspire-js/1.0.1/lib/roles-debug", "inspire-js/1.0.1/lib/trim-debug", "inspire-js/1.0.1/lib/validity-debug", "inspire-js/1.0.1/lib/dialog-debug", "inspire-js/1.0.1/lib/async-debug"], function(require, exports, module) {
+define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "inspire-js/1.0.1/lib/checkbox-debug", "inspire-js/1.0.1/lib/confirm-debug", "inspire-js/1.0.1/lib/jump-debug", "inspire-js/1.0.1/lib/link-debug", "inspire-js/1.0.1/lib/money-debug", "inspire-js/1.0.1/lib/number-debug", "inspire-js/1.0.1/lib/pagination-debug", "inspire-js/1.0.1/lib/required-debug", "inspire-js/1.0.1/lib/roles-debug", "inspire-js/1.0.1/lib/trim-debug", "inspire-js/1.0.1/lib/validity-debug", "inspire-js/1.0.1/lib/dialog-debug", "inspire-js/1.0.1/lib/async-debug", "inspire-js/1.0.1/lib/typeahead-debug", "inspire-js/1.0.1/lib/messenger-debug"], function(require, exports, module) {
   var $ = window.jQuery;
   if (!window.$doc) {
     window.$doc = $(document);
@@ -9,7 +9,6 @@ define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "in
   exports.checkbox = require("inspire-js/1.0.1/lib/confirm-debug");
   exports.jump = require("inspire-js/1.0.1/lib/jump-debug");
   exports.link = require("inspire-js/1.0.1/lib/link-debug");
-  exports.messenger = require("inspire-js/1.0.1/lib/messenger-debug");
   exports.money = require("inspire-js/1.0.1/lib/money-debug");
   exports.number = require("inspire-js/1.0.1/lib/number-debug");
   exports.pagination = require("inspire-js/1.0.1/lib/pagination-debug");
@@ -20,6 +19,8 @@ define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "in
   exports.validity = require("inspire-js/1.0.1/lib/validity-debug");
   exports.dialog = require("inspire-js/1.0.1/lib/dialog-debug");
   exports.async = require("inspire-js/1.0.1/lib/async-debug");
+  exports.typeahead = require("inspire-js/1.0.1/lib/typeahead-debug");
+  exports.messenger = require("inspire-js/1.0.1/lib/messenger-debug");
 });
 define("inspire-js/1.0.1/lib/submit-debug", [], function(require, exports, module) {
   /*!
@@ -64,7 +65,10 @@ define("inspire-js/1.0.1/lib/checkbox-debug", [], function(require, exports, mod
         var val = $(target).val();
         var tr = $this.parents('tr');
         if ($this.prop('checked')) {
-          val = $this.attr('id') + ';' + val;
+          var id = $this.attr('id')
+          if (val.indexOf(id) < 0) {
+            val = id + ';' + val;
+          }
           tr.addClass('info');
         } else {
           val = val.replace($this.attr('id') + ';', '');
@@ -218,65 +222,6 @@ define("inspire-js/1.0.1/lib/link-debug", [], function(require, exports, module)
   }
   applyAll();
   module.exports = init;
-});
-define("inspire-js/1.0.1/lib/messenger-debug", [], function(require, exports, module) {
-  /*!
-   * messenger.js
-   *
-   * https://github.com/inspireso
-   *
-   * Copyright 2014 Inspireso and/or its affiliates.
-   * Licensed under the Apache 2.0 License.
-   *
-   */
-  var $ = window.jQuery;
-
-  function config() {
-    Messenger.options = {
-      extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
-      theme: 'future'
-    };
-  }
-
-  function init(selector) {
-    var $messenger = $(selector);
-    var message = $messenger.data('message');
-    var target = $messenger.data('target');
-    var label = $messenger.data('label');
-    var messenger = Messenger().post({
-      message: message,
-      type: 'info',
-      actions: {
-        run: {
-          label: label,
-          action: function() {
-            location.href = target;
-          }
-        },
-        cancel: {
-          label: '取消',
-          action: function() {
-            return messenger.cancel();
-          }
-        }
-      }
-    });
-  }
-
-  function applyAll() {
-    var selector = 'div[role=messenger]';
-    var $messenger = $(selector);
-    if ($messenger.size() == 0 || $messenger.attr('disabled')) {
-      return;
-    }
-    init(selector);
-  };
-  config();
-  applyAll();
-  module.exports = {
-    init: init,
-    applyAll: applyAll
-  };
 });
 define("inspire-js/1.0.1/lib/money-debug", ["inspire-js/1.0.1/lib/number-debug"], function(require, exports, module) {
   /*!
@@ -570,7 +515,7 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
     //     "placeholder": null
     // },
     "tsrn": {
-      "pattern": "^\\d{15}$"
+      "pattern": "^[\\d|X|x]{15}$"
     },
     "passwd": {
       "pattern": "^[\\w\\W]{6,}$",
@@ -586,10 +531,10 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
 
   function onblur(e) {
     var $this = $(this);
-    var validator = $this.attr('pattern');
-    if (validator) {
-      var patten = new RegExp(validator);
-      if (!patten.test($this.val())) {
+    var pattern = $this.attr('pattern');
+    if (pattern) {
+      var reg = new RegExp(pattern);
+      if (!reg.test($this.val())) {
         var help = $this.nextAll().filter('span.help-inline');
         var title = $this.data('title') || help.text() || $this.attr('placeholder') || '格式不正确';
         $this.data('title', title);
@@ -627,7 +572,8 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
   applyAll();
   module.exports = {
     init: init,
-    applyAll: applyAll
+    applyAll: applyAll,
+    validators: validators
   };
 });
 define("inspire-js/1.0.1/lib/trim-debug", [], function(require, exports, module) {
@@ -705,17 +651,22 @@ define("inspire-js/1.0.1/lib/dialog-debug", [], function(require, exports, modul
    */
   var $ = window.jQuery;
 
-  function init(selector) {
+  function init(selector, ignoreHidden) {
     var $dialog = $(selector);
-    $dialog.modal({
-      'backdrop': false
-    });
+    var hidden = !ignoreHidden && $dialog.is(':hidden');
+    if ($dialog.length > 0 && !hidden) {
+      $dialog.modal({
+        'backdrop': false
+      });
+    }
   };
 
   function applyAll() {
-    init('div[role=dialog]');
+    init('div[role=dialog]', false);
+    init('div[role=cdialog]', true);
     $doc.bind('ajaxSuccess', function(e) {
-      init('div[role=dialog]');
+      init('div[role=dialog]', false);
+      init('div[role=cdialog]', true);
     });
   };
   applyAll();
@@ -735,6 +686,46 @@ define("inspire-js/1.0.1/lib/async-debug", [], function(require, exports, module
    *
    */
   var $ = window.jQuery;
+  var READY_STATE_RE = /^(?:loaded|complete|undefined)$/;
+  var IS_CSS_RE = /\.(?:(css|gzcss))(?:\?|$)/i;
+  var node = document.getElementById('inspnode');
+  var debug = node.getAttribute('debug') === 'true' || false;
+  var isArray = Array.isArray || function(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]'
+  };
+  var async = function(urls, callback) {
+    if (!isArray(urls)) urls = [urls];
+    var head = document.getElementsByTagName('head')[0] || doc.documentElement;
+    var len = urls.length - 1;
+    for (var i = 0; i <= len; i++) {
+      var url = urls[i];
+      var isCSS = IS_CSS_RE.test(url)
+      var node = document.createElement(isCSS ? 'link' : 'script')
+      if ((len == i) && (typeof callback == 'function')) {
+        node.onload = node.onerror = node.onreadystatechange = function() {
+          if (READY_STATE_RE.test(node.readyState)) {
+            // Ensure only run once and handle memory leak in IE
+            node.onload = node.onerror = node.onreadystatechange = null;
+            // Remove the script to reduce memory leak
+            if (!isCSS) {
+              head.removeChild(node)
+            }
+            // Dereference the node
+            node = null;
+            callback();
+          }
+        }
+      }
+      if (isCSS) {
+        node.rel = 'stylesheet';
+        node.href = url;
+      } else {
+        node.async = true;
+        node.src = url;
+      }
+      head.appendChild(node);
+    }
+  };
 
   function init(tagName) {
     var els = document.getElementsByTagName(tagName);
@@ -743,12 +734,12 @@ define("inspire-js/1.0.1/lib/async-debug", [], function(require, exports, module
       for (var i = 0; i < els.length; i++) {
         var src = els[i].getAttribute('src');
         //如果是生产环境，会默认压缩成.min.js|.min.css文件，所以在这边统一替换
-        if (!insp.debug) {
-          src = src.replace('.js', '.min.js').replace('.css', '.min.css');
-        }
+        // if (!debug) {
+        //     src = src.replace('.js', '.min.js').replace('.css', '.min.css');
+        // }
         requires[i] = src;
       }
-      require.async(requires);
+      async(requires);
     }
   };
 
@@ -759,6 +750,147 @@ define("inspire-js/1.0.1/lib/async-debug", [], function(require, exports, module
     });
   };
   applyAll();
+  module.exports = {
+    init: init,
+    applyAll: applyAll,
+    async: async
+  };
+});
+define("inspire-js/1.0.1/lib/typeahead-debug", [], function(require, exports, module) {
+  /*!
+   * typeahead.js
+   *
+   * https://www.github.com/inspireso
+   *
+   * Copyright 2014 Inspireso and/or its affiliates.
+   * Licensed under the Apache 2.0 License.
+   *
+   */
+  var $ = window.jQuery;
+  var isFunction = function(func) {
+    if ($.isFunction(func)) {
+      return func;
+    } else if ($.isFunction(window[func])) {
+      return window[func];
+    } else {
+      return null;
+    }
+  }
+
+  function init(selector) {
+    var $selector = $(selector);
+    var source = $selector.data("source");
+    var params = $selector.data("params");
+    var fnsource = function() {
+      return isFunction(source) || function(query, callback) {
+        $.post(source, {
+          "start": query,
+          "params": params
+        }).done(function(data) {
+          callback(data);
+        })
+      }
+    };
+    var updater = $selector.data("updater");
+    var fnupdater = function() {
+      var fn = isFunction(updater);
+      if (fn) {
+        return function(item) {
+          fn(item);
+          return item;
+        }
+      } else {
+        return function(item) {
+          $.post(updater, {
+            "item": item
+          }).done(function(data) {
+            alerts(data);
+          });
+          return item;
+        }
+      }
+    };
+    if ($selector["typeahead"] != "undefined") {
+      $selector.typeahead({
+        source: fnsource(),
+        updater: fnupdater()
+      });
+    }
+  }
+
+  function applyAll() {
+    var selector = 'input[role=typeahead]:visible';
+    var $selector = $(selector);
+    if ($selector.length == 0 || $selector.attr('disabled') || $selector["typeahead"] == "undefined") {
+      return;
+    }
+    init(selector);
+    $doc.bind('ajaxSuccess', function(e) {
+      init(selector);
+    });
+  };
+  applyAll();
+  module.exports = {
+    init: init,
+    applyAll: applyAll
+  }
+});
+define("inspire-js/1.0.1/lib/messenger-debug", [], function(require, exports, module) {
+  /*!
+   * messenger.js
+   *
+   * https://github.com/inspireso
+   *
+   * Copyright 2014 Inspireso and/or its affiliates.
+   * Licensed under the Apache 2.0 License.
+   *
+   */
+  var $ = window.jQuery;
+
+  function config() {
+    Messenger.options = {
+      extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+      theme: 'future'
+    };
+  }
+
+  function init(selector) {
+    var $messenger = $(selector);
+    var message = $messenger.data('message');
+    var target = $messenger.data('target');
+    var label = $messenger.data('label');
+    var messenger = Messenger().post({
+      message: message,
+      type: 'info',
+      actions: {
+        run: {
+          label: label,
+          action: function() {
+            location.href = target;
+          }
+        },
+        cancel: {
+          label: '取消',
+          action: function() {
+            return messenger.cancel();
+          }
+        }
+      }
+    });
+  }
+
+  function applyAll() {
+    var selector = 'div[role=messenger]';
+    var $messenger = $(selector);
+    if ($messenger.length == 0 || $messenger.attr('disabled')) {
+      return;
+    }
+    init(selector);
+  };
+  if (typeof Messenger != "undefined") {
+    config();
+    applyAll();
+  }
   module.exports = {
     init: init,
     applyAll: applyAll
