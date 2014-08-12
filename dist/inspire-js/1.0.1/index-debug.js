@@ -71,7 +71,7 @@ define("inspire-js/1.0.1/lib/checkbox-debug", [], function(require, exports, mod
           }
           tr.addClass('info');
         } else {
-          val = val.replace($this.attr('id') + ';', '');
+          val = val.replace($this.attr('id') + ';', '').replace($this.attr('id'), '');
           tr.removeClass('info');
         }
         $(target).val(val);
@@ -527,36 +527,49 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
     "money": {
       "pattern": "^[0-9]+(.[0-9]{2})?$"
     },
+    "decimal": {
+      "pattern": "^-?[0-9]+(.[0-9]{2})?$"
+    },
   };
 
   function onblur(e) {
     var $this = $(this);
-    var pattern = $this.attr('pattern');
-    if (pattern) {
-      var reg = new RegExp(pattern);
-      if (!reg.test($this.val())) {
-        var help = $this.nextAll().filter('span.help-inline');
-        var title = $this.data('title') || help.text() || $this.attr('placeholder') || '格式不正确';
-        $this.data('title', title);
-        $this.data('placement') || $this.data('placement', tipPlacement);
-        $this.data('trigger') || $this.data('trigger', 'manual');
-        $this.tooltip('show');
-        if ($this.attr('force')) $this.focus();
-      } else {
-        $this.tooltip('hide');
+    var roles = $this.attr('role') + ''.split(',');
+    for (int i = 0; i < roles.length; i++) {
+      var validator = validators[roles[i]];
+      // var pattern = $this.attr('pattern');
+      var pattern = validator.pattern;
+      if (pattern) {
+        var reg = new RegExp(pattern);
+        if (!reg.test($this.val())) {
+          var help = $this.nextAll().filter('span.help-inline');
+          var title = $this.data('title') || help.text() || $this.attr('placeholder') || validator.placeholder || '格式不正确';
+          $this.data('title', title);
+          $this.data('placement') || $this.data('placement', tipPlacement);
+          $this.data('trigger') || $this.data('trigger', 'manual');
+          $this.tooltip('show');
+          if ($this.attr('force')) $this.focus();
+        } else {
+          $this.tooltip('hide');
+        }
       }
     }
   };
 
   function init(selector) {
-    $(selector).each(function() {
-      var $this = $(this);
-      var validator = validators[$this.attr('role')];
-      if (validator && ($this.attr('type') != $this.attr('role'))) {
-        if (validator.pattern) $this.attr('pattern', validator.pattern);
-        if (validator.placeholder) $this.attr('placeholder', validator.placeholder);
-      }
-    });
+    // $(selector).each(function() {
+    //     var $this = $(this);
+    //     var roles = $this.attr('role') + ''.split(',');
+    //     for (int i = 0; i < roles.length; i++) {
+    //         var validator = validators[$this.attr('role')];
+    //         if (validator && ($this.attr('type') != $this.attr('role'))) {
+    //             if (validator.pattern)
+    //                 $this.attr('pattern', validator.pattern);
+    //             if (validator.placeholder)
+    //                 $this.attr('placeholder', validator.placeholder);
+    //         }
+    //     }
+    // });
     $('form').each(function() {
       $(this).attr('novalidate', 'novalidate');
     })
@@ -765,6 +778,17 @@ define("inspire-js/1.0.1/lib/typeahead-debug", [], function(require, exports, mo
    * Copyright 2014 Inspireso and/or its affiliates.
    * Licensed under the Apache 2.0 License.
    *
+   * Example:
+   *     input: <input id="typeahead-input"
+   *                     role="typeahead"
+   *                     data-source="url or function, return [{"name":"display name", "value":"val1"},...]"
+   *                     data-params="parameters with source"
+   *                     data-updater="url or function"/>
+   *     data-source:获取数据的URL或者自定义js函数,返回一个JSON数组即可。
+   *         js函数格式:function(query, callback)
+   *     data-params:获取数据传递的参数，数据类型可以是String 或者 JSON
+   *     data-updater:选中某个数据项后的更新函数，也可以是一个URL，返回选中的结果。
+   *
    */
   var $ = window.jQuery;
   var isFunction = function(func) {
@@ -776,44 +800,65 @@ define("inspire-js/1.0.1/lib/typeahead-debug", [], function(require, exports, mo
       return null;
     }
   }
+  var fnsource = function(query, callback) {
+    var fn = isFunction(source);
+    if (fn) {
+      return fn(query, callback);
+    } else {
+      var $this = this;
+      var source = this.$element.data("source");
+      var params = this.$element.data("params");
+      // var url = window.location.protocol + '//' + window.location.host + '/' + source;
+      var url = source.replace('//', '/');
+      $.post(url, {
+        "start": query,
+        "params": params
+      }).done(function(items) {
+        items = $(items).map(function(i, item) {
+          return {
+            value: item.value,
+            name: item.name,
+            toString: function() {
+              return JSON.stringify(this);
+            }
+          };
+        })
+        return $this.render(items.slice(0, $this.options.items)).show()
+      })
+    }
+  };
+  var fnupdater = function(item) {
+    var updater = this.$element.data("updater");
+    var json = JSON.parse(item);
+    if (updater) {
+      var fn = isFunction(updater);
+      if (fn) {
+        fn(json);
+      } else {
+        // var url = window.location.protocol + '//' + window.location.host + '/' + updater;
+        var url = updater.replace('//', '/');
+        $.post(url, {
+          "item": json.value
+        }).done(function(data) {
+          // alerts(data);
+        });
+      }
+    }
+    return json.name;
+  };
 
   function init(selector) {
     var $selector = $(selector);
-    var source = $selector.data("source");
-    var params = $selector.data("params");
-    var fnsource = function() {
-      return isFunction(source) || function(query, callback) {
-        $.post(source, {
-          "start": query,
-          "params": params
-        }).done(function(data) {
-          callback(data);
-        })
-      }
-    };
-    var updater = $selector.data("updater");
-    var fnupdater = function() {
-      var fn = isFunction(updater);
-      if (fn) {
-        return function(item) {
-          fn(item);
-          return item;
-        }
-      } else {
-        return function(item) {
-          $.post(updater, {
-            "item": item
-          }).done(function(data) {
-            alerts(data);
-          });
-          return item;
-        }
-      }
-    };
     if ($selector["typeahead"] != "undefined") {
       $selector.typeahead({
-        source: fnsource(),
-        updater: fnupdater()
+        source: fnsource,
+        updater: fnupdater,
+        highlighter: function(item) {
+          return this.__proto__.highlighter.call(this, item.name);
+        },
+        matcher: function(item) {
+          return this.__proto__.matcher.call(this, item.name);
+        }
       });
     }
   }
@@ -825,7 +870,7 @@ define("inspire-js/1.0.1/lib/typeahead-debug", [], function(require, exports, mo
       return;
     }
     init(selector);
-    $doc.bind('ajaxSuccess', function(e) {
+    $doc.bind('ajaxComplete', function(e) {
       init(selector);
     });
   };
