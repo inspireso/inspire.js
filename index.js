@@ -6,6 +6,7 @@ if (!window.$doc) {
 
 exports = module.exports;
 
+exports.messenger = require('./lib/string');
 exports.submit = require('./lib/submit');
 exports.checkbox = require('./lib/checkbox');
 exports.checkbox = require('./lib/confirm');

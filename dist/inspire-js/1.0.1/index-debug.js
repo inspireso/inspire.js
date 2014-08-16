@@ -1,16 +1,18 @@
-define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "inspire-js/1.0.1/lib/checkbox-debug", "inspire-js/1.0.1/lib/confirm-debug", "inspire-js/1.0.1/lib/jump-debug", "inspire-js/1.0.1/lib/link-debug", "inspire-js/1.0.1/lib/money-debug", "inspire-js/1.0.1/lib/number-debug", "inspire-js/1.0.1/lib/pagination-debug", "inspire-js/1.0.1/lib/required-debug", "inspire-js/1.0.1/lib/roles-debug", "inspire-js/1.0.1/lib/trim-debug", "inspire-js/1.0.1/lib/validity-debug", "inspire-js/1.0.1/lib/dialog-debug", "inspire-js/1.0.1/lib/async-debug", "inspire-js/1.0.1/lib/typeahead-debug", "inspire-js/1.0.1/lib/messenger-debug"], function(require, exports, module) {
+define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/string-debug", "inspire-js/1.0.1/lib/submit-debug", "inspire-js/1.0.1/lib/checkbox-debug", "inspire-js/1.0.1/lib/confirm-debug", "inspire-js/1.0.1/lib/jump-debug", "inspire-js/1.0.1/lib/link-debug", "inspire-js/1.0.1/lib/number-debug", "inspire-js/1.0.1/lib/money-debug", "inspire-js/1.0.1/lib/decimal-debug", "inspire-js/1.0.1/lib/pagination-debug", "inspire-js/1.0.1/lib/required-debug", "inspire-js/1.0.1/lib/roles-debug", "inspire-js/1.0.1/lib/trim-debug", "inspire-js/1.0.1/lib/validity-debug", "inspire-js/1.0.1/lib/dialog-debug", "inspire-js/1.0.1/lib/async-debug", "inspire-js/1.0.1/lib/typeahead-debug", "inspire-js/1.0.1/lib/messenger-debug"], function(require, exports, module) {
   var $ = window.jQuery;
   if (!window.$doc) {
     window.$doc = $(document);
   }
   exports = module.exports;
+  exports.messenger = require("inspire-js/1.0.1/lib/string-debug");
   exports.submit = require("inspire-js/1.0.1/lib/submit-debug");
   exports.checkbox = require("inspire-js/1.0.1/lib/checkbox-debug");
   exports.checkbox = require("inspire-js/1.0.1/lib/confirm-debug");
   exports.jump = require("inspire-js/1.0.1/lib/jump-debug");
   exports.link = require("inspire-js/1.0.1/lib/link-debug");
-  exports.money = require("inspire-js/1.0.1/lib/money-debug");
   exports.number = require("inspire-js/1.0.1/lib/number-debug");
+  exports.money = require("inspire-js/1.0.1/lib/money-debug");
+  exports.decimal = require("inspire-js/1.0.1/lib/decimal-debug");
   exports.pagination = require("inspire-js/1.0.1/lib/pagination-debug");
   exports.required = require("inspire-js/1.0.1/lib/required-debug");
   exports.roles = require("inspire-js/1.0.1/lib/roles-debug");
@@ -21,6 +23,49 @@ define("inspire-js/1.0.1/index-debug", ["inspire-js/1.0.1/lib/submit-debug", "in
   exports.async = require("inspire-js/1.0.1/lib/async-debug");
   exports.typeahead = require("inspire-js/1.0.1/lib/typeahead-debug");
   exports.messenger = require("inspire-js/1.0.1/lib/messenger-debug");
+});
+define("inspire-js/1.0.1/lib/string-debug", [], function(require, exports, module) {
+  /*!
+   * submit.js
+   *
+   * https://github.com/inspireso
+   *
+   * Copyright 2014 Inspireso and/or its affiliates.
+   * Licensed under the Apache 2.0 License.
+   *
+   */
+  var $ = window.jQuery;
+  var joiner = {
+    init: function(separator) {
+      this.separator = separator || ',';
+      return this;
+    },
+    join: function(object) {
+      var array = $.isArray(object) ? object : [object];
+      return array.join(this.separator);
+    }
+  }
+  joiner.init.prototype = joiner;
+  window.Joiner = {
+    on: function(separator) {
+      return new joiner.init(separator);
+    }
+  };
+  var spliter = {
+    init: function(separator) {
+      this.separator = separator || ',';
+      return this;
+    },
+    split: function(sequence) {
+      return sequence.split(this.separator);
+    }
+  }
+  spliter.init.prototype = spliter;
+  window.Spliter = {
+    on: function(separator) {
+      return new spliter.init(separator);
+    }
+  };
 });
 define("inspire-js/1.0.1/lib/submit-debug", [], function(require, exports, module) {
   /*!
@@ -94,8 +139,8 @@ define("inspire-js/1.0.1/lib/checkbox-debug", [], function(require, exports, mod
   }
 
   function applyAll() {
-    applyTableSelected('input:checkbox[role=table-selected]');
-    applyTableSelectedAll('input:checkbox[role=table-selected-all]');
+    applyTableSelected('input:checkbox[role*=table-selected]');
+    applyTableSelectedAll('input:checkbox[role*=table-selected-all]');
   }
   applyAll();
 });
@@ -117,20 +162,27 @@ define("inspire-js/1.0.1/lib/confirm-debug", [], function(require, exports, modu
       if (!window.confirm($this.data("message"))) {
         e.preventDefault();
         e.stopPropagation();
+      } else {
+        var target = $(this).data('target');
+        if (target) {
+          $(target).click();
+        }
       }
     }
   };
 
   function init(selector) {
     $(selector).each(function() {
-      $(this).unbind('click').click(onclick);
+      $(this).off('click').click(onclick);
     });
   };
 
   function applyAll() {
-    init("span[role=confirm]");
-    $doc.bind("ajaxSuccess", function(e) {
-      init("span[role=confirm]");
+    $.each(['span[role*=confirm]', 'a[role*=confirm]'], function(index, val) {
+      init(val);
+      $doc.bind("ajaxSuccess", function(e) {
+        init(val);
+      });
     });
   };
   applyAll();
@@ -182,9 +234,9 @@ define("inspire-js/1.0.1/lib/jump-debug", [], function(require, exports, module)
   }
 
   function applyAll() {
-    init('div[role=jump]');
+    init('div[role*=jump]');
     $doc.bind('ajaxSuccess', function(e) {
-      init('div[role=jump]');
+      init('div[role*=jump]');
     });
   };
   applyAll();
@@ -216,12 +268,44 @@ define("inspire-js/1.0.1/lib/link-debug", [], function(require, exports, module)
   }
 
   function applyAll() {
-    $doc.bind("ajaxSuccess", function(e) {
-      init("[role=button]");
+    var selector = '[role*=button]';
+    $doc.bind('ajaxSuccess', function(e) {
+      init(selector);
     });
   }
   applyAll();
   module.exports = init;
+});
+define("inspire-js/1.0.1/lib/number-debug", [], function(require, exports, module) {
+  /*!
+   * number.js
+   *
+   * https://github.com/inspireso
+   *
+   * Copyright 2014 Inspireso and/or its affiliates.
+   * Licensed under the Apache 2.0 License.
+   *
+   */
+  var $ = window.jQuery;
+
+  function onkeydown() {
+    if (event.keyCode == 37 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190 || event.keyCode == 110 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {} else {
+      return false;
+    }
+  };
+
+  function init(selector) {
+    $doc.on('keydown', selector, onkeydown);
+  };
+
+  function applyAll() {
+    init('input[role*=number]:visible');
+  };
+  applyAll();
+  module.exports = {
+    init: init,
+    applyAll: applyAll
+  };
 });
 define("inspire-js/1.0.1/lib/money-debug", ["inspire-js/1.0.1/lib/number-debug"], function(require, exports, module) {
   /*!
@@ -286,7 +370,7 @@ define("inspire-js/1.0.1/lib/money-debug", ["inspire-js/1.0.1/lib/number-debug"]
   };
 
   function applyAll() {
-    init('input[role=money]:visible');
+    init('input[role*=money]:visible');
   };
   applyAll();
   module.exports = {
@@ -294,9 +378,9 @@ define("inspire-js/1.0.1/lib/money-debug", ["inspire-js/1.0.1/lib/number-debug"]
     applyAll: applyAll
   };
 });
-define("inspire-js/1.0.1/lib/number-debug", [], function(require, exports, module) {
+define("inspire-js/1.0.1/lib/decimal-debug", [], function(require, exports, module) {
   /*!
-   * number.js
+   * nomey.js
    *
    * https://github.com/inspireso
    *
@@ -305,19 +389,106 @@ define("inspire-js/1.0.1/lib/number-debug", [], function(require, exports, modul
    *
    */
   var $ = window.jQuery;
-
+  // var number = require('./number');
   function onkeydown() {
-    if (event.keyCode == 37 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190 || event.keyCode == 110 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {} else {
+    if (event.keyCode == 189 || event.keyCode == 37 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190 || event.keyCode == 110 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {} else {
       return false;
     }
   };
 
+  function onblur() {
+    var $this = $(this);
+    var scale = $this.attr('scale');
+    this.value = format(this.value, scale);
+  };
+
+  function onpaste() {
+    var text = clipboardData.getData('text');
+    if (valid(text)) {
+      clipboardData.setData('text', text);
+    } else {
+      return false;
+    }
+  }; // 禁止粘贴1.Float64Array();
+  function valid(txt) {
+    var i = 0;
+    var len = txt.length;
+    for (i = 0; i < len; i++) {
+      var checkTxt = txt.charCodeAt(i); // 使用charCodeAt方法，方法可返回指定位置的字符的
+      // Unicode 编码。这个返回值是 0 - 65535
+      // 之间的整数。
+      if (checkTxt == 37 || checkTxt == 8 || checkTxt == 39 || checkTxt == 46 || checkTxt == 190 || checkTxt == 110 || (checkTxt >= 48 && checkTxt <= 57) || (checkTxt >= 96 && checkTxt <= 105)) {
+        continue;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  function format(number, scale, roundHalfUp) {
+    scale = scale > 0 && scale <= 20 ? scale : 2;
+    var newString; // The new rounded number
+    scale = Number(scale);
+    if (scale < 1) {
+      newString = (Math.round(number)).toString();
+    } else {
+      var numString = number.toString();
+      var minusSign = '';
+      if (numString.indexOf('-')) {
+        minusSign = numString.substring(0, 1);
+        numString = numString.substring(1, numString.length)
+      }
+      if (numString.lastIndexOf(".") == -1) { // If there is no decimal point
+        numString += "."; // give it one at the end
+      }
+      var cutoff = numString.lastIndexOf(".") + scale; // The point at which to truncate the number
+      var d1 = Number(numString.substring(cutoff, cutoff + 1)); // The value of the last decimal place that we'll end up with
+      var d2 = Number(numString.substring(cutoff + 1, cutoff + 2)); // The next decimal, after the last one we want
+      if (roundHalfUp && d2 >= 5) { // Do we need to round up at all? If not, the string will just be truncated
+        if (d1 == 9 && cutoff > 0) { // If the last digit is 9, find a new cutoff point
+          while (cutoff > 0 && (d1 == 9 || isNaN(d1))) {
+            if (d1 != ".") {
+              cutoff -= 1;
+              d1 = Number(numString.substring(cutoff, cutoff + 1));
+            } else {
+              cutoff -= 1;
+            }
+          }
+        }
+        d1 += 1;
+      }
+      if (d1 == 10) {
+        numString = numString.substring(0, numString.lastIndexOf("."));
+        var roundedNum = Number(numString) + 1;
+        newString = roundedNum.toString() + '.';
+      } else {
+        newString = numString.substring(0, cutoff) + d1.toString();
+      }
+    }
+    if (newString.lastIndexOf(".") == -1) { // Do this again, to the new string
+      newString += ".";
+    }
+    var decs = (newString.substring(newString.lastIndexOf(".") + 1)).length;
+    for (var i = 0; i < scale - decs; i++) newString += "0";
+    return minusSign + newString;
+  }
+
   function init(selector) {
-    $doc.on('keydown', selector, onkeydown);
+    $(selector).each(function(index, el) {
+      $(el).trigger('blur');
+    });
   };
 
   function applyAll() {
-    init('input[role=number]:visible');
+    var selector = 'input[role*=decimal]:visible';
+    $doc.on('keydown', selector, onkeydown);
+    $doc.on('blur', selector, onblur);
+    $doc.on('paste', selector, onpaste);
+    init(selector);
+    $doc.bind('ajaxSuccess', function(e) {
+      init(selector);
+    });
   };
   applyAll();
   module.exports = {
@@ -378,19 +549,27 @@ define("inspire-js/1.0.1/lib/pagination-debug", [], function(require, exports, m
   }
 
   function init(selector) {
-    var $pagination = $(selector);
-    if ($pagination.size() < 1 || $pagination.data('pending')) {
+    var $paginations = $(selector);
+    if ($paginations.size() < 1) {
       return;
     }
-    $pagination.data('pending', true);
-    refresh($pagination);
-    $pagination.removeData('pending');
+    $paginations.each(function(index, el) {
+      var $item = $(el);
+      if ($item.data('pending')) {
+        return;
+      }
+      $item.data('pending', true);
+      refresh($item);
+      $item.removeData('pending');
+    });
   }
 
   function applyAll() {
-    init('#pagination');
-    $doc.bind('ajaxSuccess', function(e) {
-      init('#pagination');
+    $.each(['#pagination', '.pagination'], function(index, val) {
+      init(val);
+      $doc.bind('ajaxSuccess', function(e) {
+        init(val);
+      });
     });
   };
   applyAll();
@@ -528,16 +707,16 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
       "pattern": "^[0-9]+(.[0-9]{2})?$"
     },
     "decimal": {
-      "pattern": "^-?[0-9]+(.[0-9]{2})?$"
+      "pattern": "^-?[0-9]+(.[0-9]\\d*)?$"
     },
   };
 
   function onblur(e) {
     var $this = $(this);
-    var roles = $this.attr('role') + ''.split(',');
-    for (int i = 0; i < roles.length; i++) {
+    var roles = ($this.attr('role') + ',').split(',');
+    for (var i = 0; i < roles.length; i++) {
+      if (roles[i].length < 1) continue;
       var validator = validators[roles[i]];
-      // var pattern = $this.attr('pattern');
       var pattern = validator.pattern;
       if (pattern) {
         var reg = new RegExp(pattern);
@@ -549,11 +728,11 @@ define("inspire-js/1.0.1/lib/roles-debug", [], function(require, exports, module
           $this.data('trigger') || $this.data('trigger', 'manual');
           $this.tooltip('show');
           if ($this.attr('force')) $this.focus();
-        } else {
-          $this.tooltip('hide');
+          return;
         }
       }
     }
+    $this.tooltip('hide');
   };
 
   function init(selector) {
@@ -675,11 +854,11 @@ define("inspire-js/1.0.1/lib/dialog-debug", [], function(require, exports, modul
   };
 
   function applyAll() {
-    init('div[role=dialog]', false);
-    init('div[role=cdialog]', true);
+    init('div[role*=dialog]', false);
+    init('div[role*=cdialog]', true);
     $doc.bind('ajaxSuccess', function(e) {
-      init('div[role=dialog]', false);
-      init('div[role=cdialog]', true);
+      init('div[role*=dialog]', false);
+      init('div[role*=cdialog]', true);
     });
   };
   applyAll();
@@ -864,7 +1043,7 @@ define("inspire-js/1.0.1/lib/typeahead-debug", [], function(require, exports, mo
   }
 
   function applyAll() {
-    var selector = 'input[role=typeahead]:visible';
+    var selector = 'input[role*=typeahead]:visible';
     var $selector = $(selector);
     if ($selector.length == 0 || $selector.attr('disabled') || $selector["typeahead"] == "undefined") {
       return;
@@ -925,7 +1104,7 @@ define("inspire-js/1.0.1/lib/messenger-debug", [], function(require, exports, mo
   }
 
   function applyAll() {
-    var selector = 'div[role=messenger]';
+    var selector = 'div[role*=messenger]';
     var $messenger = $(selector);
     if ($messenger.length == 0 || $messenger.attr('disabled')) {
       return;
