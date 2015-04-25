@@ -1,6 +1,6 @@
 {
   "name": "inspire-js",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "inspire-js:一个使用HTML扩展属性来扩展原生HTML标签功能的js库",
   "keywords": [
     "inspireso",
