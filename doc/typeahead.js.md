@@ -1,16 +1,16 @@
 # typeahead.js
 
-标签（空格分隔）： inspire.js
+tags： inspire.js
 
 ---
 
-# 功能
+## 功能
 
 typeahead.js 通过在input上添加标记定义自动完成功能的扩展。该脚本基于
 [bootstrap](http://getbootstrap.com/2.3.2/)中的typeahead插件扩展。 
 
 
-# 使用
+## 使用
 通过在 `html` `<input />` 标签上添加 `role="typeahead"`和对应的属性来让脚本自动识别并完成typeahead的初始化。如下：
 
 html:
@@ -36,7 +36,7 @@ function afterSelected(item) {
 }
 ```
 
-# 参数说明
+## 参数说明
 
 - role=typeahead: 标记，用于脚本在加载后自动识别并初始化
 - data-source: 获取数据的URL或者自定义js函数,返回一个JSON数组即可。js函数格式:function(query, callback)
