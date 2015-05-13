@@ -2,7 +2,7 @@
 
 ---inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，比如input的校验、自动去空格、自动完成等功能。
 
-tags: inspire inspireso
+tag: inspire inspireso
 
 An awesome spm package!
 

@@ -1,6 +1,6 @@
 # async.js
 
-tags： inspire.js
+tag： inspire.js
 
 ---
 
