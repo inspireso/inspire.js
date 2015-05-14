@@ -5,6 +5,12 @@ inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，�
 
 ## 安装
 
+bower:
+```
+$ bower install inspireso/inspire.js --save
+```
+
+spm:
 ```
 $ spm install inspire-js --save
 ```
