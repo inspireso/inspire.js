@@ -7,8 +7,9 @@ checkbox.js 扩展checkbox元素，定义了表格多选功能，可用 [multise
 
 ## 使用
 在页面上添加如下标签，页面加载完成后会自动异步加载指定的资源。一般是 `js` 资源，
-不建议用于 `css` ，css最好在 'head' 位置就使用'<link/>'标签加载，可以提高页面渲染的性能。
+不建议用于 `css` ，css最好在 `head` 位置就使用`<link/>`标签加载，可以提高页面渲染的性能。
 html:
+
 ```html
 <table>
     <thead>
