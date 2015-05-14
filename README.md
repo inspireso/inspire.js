@@ -1,12 +1,7 @@
 # inspire.js
 
----inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，比如input的校验、自动去空格、自动完成等功能。
+inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，比如input的校验、自动去空格、自动完成等功能。
 
-tag: inspire inspireso
-
-An awesome spm package!
-
----
 
 ## 安装
 
@@ -26,7 +21,7 @@ var inspire = require('inspire-js');
 <script type="text/javascript" src="https://github.com/inspireso/inspire.js/tree/master/dist/inspire-js/x.x.x/inspire.js"></script>
 ```
 
-## 详情
+## 模块
 
 - [asnyc](./doc/asnyc.js.md): 异步加载资源
 - [checkbox](./doc/checkbox.js.md)： 表格多选功能，可用 multiselect 代替

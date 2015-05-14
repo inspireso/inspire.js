@@ -1,9 +1,5 @@
 # async.js
 
-tag： inspire.js
-
----
-
 ## 功能
 
 async.js 定义了 `<require src="xxx">` 标签来提供异步加载资源的功能。包括 `js` ，和 `css` 。
