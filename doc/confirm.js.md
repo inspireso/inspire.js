@@ -1,4 +1,4 @@
-# checkbox.js
+# confirm.js
 
 ## 功能
 
