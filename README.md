@@ -50,7 +50,8 @@ inspirejs.tableSortable.config.selector="table";
 - [roles](./doc/roles.js.md)： 扩展 `<input>`控件，预定义角色用于调整input的行为，比如role=email,role=url 等
 - [string case](./doc/string-case.js.md)： 自动大小写
 - [double submit](./doc/submit.js.md)： 在页面段控制重复提交
-- [table sorter](./doc/table-sorter.js.md)： 表格自动排序（仅限于浏览器端的数据）
+- [table sortable](./doc/table-sortable.js.md)： 表格自动排序（仅限于浏览器端的数据）
+- [table dragable](./doc/table-dragable.js.md)： 表格列拖拽配许（仅限于浏览器端的数据）
 - [input trim](./doc/trim.js.md)： 自动删除前后的空格
 - [typeahead](./doc/typeahead.js.md)： 自动完成（输入自动联想）
 - [validity](./doc/validity.js.md)： 自动校验消息的设置
