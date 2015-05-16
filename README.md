@@ -19,6 +19,10 @@ $ spm install inspire-js --save
 
 ```js
 var inspire = require('inspire-js');
+// config inspire.js
+inspirejs.tableDragable.config.selector="table";
+inspirejs.tableSortable.config.selector="table";
+
 // use inspiresoControls
 ```
 或者直接在 `html` 页面中引入脚本
@@ -44,7 +48,7 @@ var inspire = require('inspire-js');
 - [pagination](./doc/pagination.js.md)： 自动配置分页控件
 - [required](./doc/required.js.md)： 校验必填字段
 - [roles](./doc/roles.js.md)： 扩展 `<input>`控件，预定义角色用于调整input的行为，比如role=email,role=url 等
-- [string case](./doc/StringCase.js.md)： 自动大小写
+- [string case](./doc/string-case.js.md)： 自动大小写
 - [double submit](./doc/submit.js.md)： 在页面段控制重复提交
 - [table sorter](./doc/table-sorter.js.md)： 表格自动排序（仅限于浏览器端的数据）
 - [input trim](./doc/trim.js.md)： 自动删除前后的空格

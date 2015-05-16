@@ -2,7 +2,7 @@
 
 ## 功能
 
-decimal.js 扩展input，支持自动格式化为decimal类型的文本。限制是只能输入0~9 . -
+decimal.js 扩展input，支持自动格式化为decimal类型的文本,限制是只能输入0~9 . -
 
 
 ## 使用
