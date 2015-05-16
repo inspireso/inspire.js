@@ -31,7 +31,7 @@ inspirejs.required = require('./lib/required');
 inspirejs.roles = require('./lib/roles');
 inspirejs.submit = require('./lib/submit');
 inspirejs.trim = require('./lib/trim');
-inspirejs.StringCase = require('./lib/StringCase');
+inspirejs.stringCase = require('./lib/string-case');
 inspirejs.validity = require('./lib/validity');
 inspirejs.dialog = require('./lib/dialog');
 inspirejs.async = require('./lib/async');
@@ -39,5 +39,7 @@ inspirejs.typeahead = require('./lib/typeahead');
 inspirejs.messenger = require('./lib/messenger');
 inspirejs.stopwatch = require('./lib/stopwatch');
 inspirejs.datetime = require('./lib/datetime-picker');
+inspirejs.tableSortable = require('./lib/table-sortable');
+inspirejs.tableDragable = require('./lib/table-dragable');
 
 module.exports = inspirejs;

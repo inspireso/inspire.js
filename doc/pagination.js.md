@@ -1,18 +1,37 @@
-# decimal.js
+# pagination.js
 
 ## 功能
 
-decimal.js 扩展input，支持自动格式化为decimal类型的文本,限制是只能输入0~9 . -
+pagination.js 自动适配分页控件。
 
 
 ## 使用
-在input元素或者a元素上添加role="decimal"
 
 html:
-
 ```html
-<a role="confirm" data-target="#realTarget" data-message="确认提示消息">test confirm </a>
-<a class="hide" id="realTarget" href="http://www.baidu.com"/>
+<strong id="pagination" class="btn btn-link text" data-target="${target}"
+        data-text-format="${textFormat}" role="pager">${text}</strong>
+
+<a id="pagination-previous-link" class="pager-previous btn disabled" data-target="${previous}">
+    <i class="icon-chevron-left"/>
+    ${message:pagination.newer-label}
+</a>
+
+<a id="pagination-next-link" class="pager-next btn disabled" data-target="${next}">
+    ${message:pagination.older-label}
+    <i class="icon-chevron-right"/>
+</a>
+
+<div class="hide">
+    <a class="query-preview-link" t:type="eventlink" t:event="previous"
+       t:context="model" t:zone="^"/>
+    <a class="query-next-link" t:type="eventlink" t:event="next"
+       t:context="model" t:zone="^"/>
+</div>
+
+<table id="table" class="table">
+
+</table>
 ```
 
 
