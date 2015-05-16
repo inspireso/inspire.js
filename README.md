@@ -55,3 +55,7 @@ inspirejs.tableSortable.config.selector="table";
 - [input trim](./doc/trim.js.md)： 自动删除前后的空格
 - [typeahead](./doc/typeahead.js.md)： 自动完成（输入自动联想）
 - [validity](./doc/validity.js.md)： 自动校验消息的设置
+
+## License
+
+This plugin is available under [the MIT license](http://mths.be/mit).
