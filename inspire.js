@@ -3,20 +3,21 @@
 var $ = window.jQuery;
 
 if (!window.$doc) {
-    window.$doc = $(document);
+	window.$doc = $(document);
 }
 
-Array.prototype.remove = function(el){
-    var index = this.indexOf(el);
-    return index > -1 ? this.splice(index,1) : this;
+Array.prototype.remove = function(el) {
+	var index = this.indexOf(el);
+	return index > -1 ? this.splice(index, 1) : this;
 };
 
 
 var inspirejs = {
-    version: "1.0.1"
+	version: "1.0.1"
 };
 
-inspirejs.string = require('./lib/string');
+inspirejs.string = require('./lib/strings');
+
 inspirejs.submit = require('./lib/submit');
 inspirejs.checkbox = require('./lib/checkbox');
 inspirejs.multiselect = require('./lib/multiselect');
@@ -29,7 +30,6 @@ inspirejs.decimal = require('./lib/decimal');
 inspirejs.pagination = require('./lib/pagination');
 inspirejs.required = require('./lib/required');
 inspirejs.roles = require('./lib/roles');
-inspirejs.submit = require('./lib/submit');
 inspirejs.trim = require('./lib/trim');
 inspirejs.stringCase = require('./lib/string-case');
 inspirejs.validity = require('./lib/validity');
@@ -41,5 +41,31 @@ inspirejs.stopwatch = require('./lib/stopwatch');
 inspirejs.datetime = require('./lib/datetime-picker');
 inspirejs.tableSortable = require('./lib/table-sortable');
 inspirejs.tableDragable = require('./lib/table-dragable');
+
+inspirejs.applyAll = function() {
+	inspirejs.submit.applyAll();
+	inspirejs.checkbox.applyAll();
+	inspirejs.multiselect.applyAll();
+	inspirejs.confirm.applyAll();
+	inspirejs.jump.applyAll();
+	inspirejs.link.applyAll();
+	inspirejs.number.applyAll();
+	inspirejs.money.applyAll();
+	inspirejs.decimal.applyAll();
+	inspirejs.pagination.applyAll();
+	inspirejs.required.applyAll();
+	inspirejs.roles.applyAll();
+	inspirejs.trim.applyAll();
+	inspirejs.stringCase.applyAll();
+	inspirejs.validity.applyAll();
+	inspirejs.dialog.applyAll();
+	inspirejs.async.applyAll();
+	inspirejs.typeahead.applyAll();
+	inspirejs.messenger.applyAll();
+	inspirejs.stopwatch.applyAll();
+	inspirejs.datetime.applyAll();
+	inspirejs.tableSortable.applyAll();
+	inspirejs.tableDragable.applyAll();
+}
 
 module.exports = inspirejs;
