@@ -1,31 +1,51 @@
 {
-  "name": "inspire-js",
-  "version": "1.1.8",
-  "description": "inspire-js:一个使用HTML扩展属性来扩展原生HTML标签功能的js库",
-  "keywords": [
-    "inspireso",
-    "inspire.js"
-  ],
-  "homepage": "https://github.com/inspireso/inspire.js",
-  "author": "Inspireso Team",
-  "maintainers": [
-    "Inspireso Team"
-  ],
+  "name": "inspire.js",
+  "version": "2.0.3",
+  "description": "inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，比如input的校验、自动去空格、自动完成等功能。",
+  "main": "inspire.js",
+  "directories": {
+    "doc": "doc",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/inspireso/inspire.js.git"
   },
+  "keywords": [
+    "inspire.js",
+    "inspire-js",
+    "inspireso"
+  ],
+  "author": "lanxenet@gmail.com",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/inspireso/inspire.js/issues"
   },
-  "licenses": "MIT",
+  "files": [
+    "dist",
+    "lib",
+    "inspire.js"
+  ],
+  "homepage": "https://github.com/inspireso/inspire.js",
+  "dependencies": {
+    "jquery": "1.9.1"
+  },
+  "devDependencies": {
+    "qunit": "^0.7.6"
+  },
   "spm": {
     "main": "inspire.js",
     "dependencies": {},
     "devDependencies": {
       "expect.js": "0.3.1"
     },
-    "ignore": ["dist"],
+    "ignore": [
+      "dist"
+    ],
     "buildArgs": " --debug",
     "engines": {
       "seajs": "2.2.1"
