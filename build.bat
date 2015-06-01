@@ -1,2 +1,2 @@
 @cd %~dp0
-%NODE_HOME%\spm build
+%NODE_HOME%/browserify -d inspire.js -o dist/inspire.js
