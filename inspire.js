@@ -6,7 +6,7 @@ if (!window.$doc) {
 	window.$doc = $(document);
 }
 
-Array.prototype.remove = function(el) {
+Array.prototype.remove = function (el) {
 	var index = this.indexOf(el);
 	return index > -1 ? this.splice(index, 1) : this;
 };
@@ -42,7 +42,7 @@ inspirejs.datetime = require('./lib/datetime-picker');
 inspirejs.tableSortable = require('./lib/table-sortable');
 inspirejs.tableDragable = require('./lib/table-dragable');
 
-inspirejs.applyAll = function() {
+inspirejs.applyAll = function () {
 	inspirejs.submit.applyAll();
 	inspirejs.checkbox.applyAll();
 	inspirejs.multiselect.applyAll();

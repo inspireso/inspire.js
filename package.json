@@ -1,6 +1,6 @@
 {
   "name": "inspire.js",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "inspire-js 是一个使用HTML扩展属性来扩展原生HTML标签的功能，比如input的校验、自动去空格、自动完成等功能。",
   "main": "inspire.js",
   "directories": {
@@ -32,24 +32,12 @@
   ],
   "homepage": "https://github.com/inspireso/inspire.js",
   "dependencies": {
-    "jquery": "1.9.1"
+    "dragtable": "^2.0.12",
+    "jquery": "1.9.1",
+    "store.js": "^1.0.4",
+    "tablesorter-widesign": "^2.20.3"
   },
   "devDependencies": {
     "qunit": "^0.7.6"
-  },
-  "spm": {
-    "main": "inspire.js",
-    "dependencies": {},
-    "devDependencies": {
-      "expect.js": "0.3.1"
-    },
-    "ignore": [
-      "dist"
-    ],
-    "buildArgs": " --debug",
-    "engines": {
-      "seajs": "2.2.1"
-    },
-    "tests": "tests/*.js"
   }
 }
