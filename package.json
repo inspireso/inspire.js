@@ -32,12 +32,10 @@
   ],
   "homepage": "https://github.com/inspireso/inspire.js",
   "dependencies": {
-    "dragtable": "^2.0.12",
-    "jquery": "1.9.1",
-    "store.js": "^1.0.4",
-    "tablesorter-widesign": "^2.20.3"
+    "store.js": "^1.0.4"
   },
   "devDependencies": {
-    "qunit": "^0.7.6"
+    "qunit": "^0.7.6",
+    "jquery": "1.9.1"
   }
 }
